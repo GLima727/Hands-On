@@ -30,26 +30,6 @@ class MediaPipeHandsExplorer:
             'show_bounding_box': True,
             }
         
-        # Performance tracking
-        self.fps_counter = 0
-        self.fps_start_time = time.time()
-        self.current_fps = 0
-        
-    def print_all_parameters(self):
-        """Print all current parameters and their meanings"""
-        print("\n=== CURRENT MEDIAPIPE HANDS PARAMETERS ===")
-        for key, value in self.params.items():
-            print(f"{key}: {value}")
-            self._explain_parameter(key)
-        print("=" * 50)
-    
-    def toggle_debug_mode(self, mode_name):
-        """Toggle a debug visualization mode"""
-        if mode_name in self.debug_modes:
-            self.debug_modes[mode_name] = not self.debug_modes[mode_name]
-            print(f"Toggled {mode_name}: {self.debug_modes[mode_name]}")
-        else:
-            print(f"Debug mode {mode_name} not found!")
     
     def draw_enhanced_landmarks(self, image, results):
         """Draw landmarks with additional debug information"""
@@ -82,34 +62,6 @@ class MediaPipeHandsExplorer:
         
         cv2.rectangle(image, (x_min - 10, y_min - 10), (x_max + 10, y_max + 10), (0, 255, 0), 2)
     
-    def calculate_fps(self):
-        """Calculate and update FPS"""
-        self.fps_counter += 1
-        if time.time() - self.fps_start_time > 1.0:
-            self.current_fps = self.fps_counter
-            self.fps_counter = 0
-            self.fps_start_time = time.time()
-    
-    def draw_debug_info(self, image):
-        """Draw debug information on the image"""
-        y_offset = 30
-        
-        # FPS
-        if self.debug_modes['show_fps']:
-            cv2.putText(image, f"FPS: {self.current_fps}", (10, y_offset), 
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
-            y_offset += 30
-        
-        # Current parameters
-        param_text = f"Model: {self.params['model_complexity']} | Max Hands: {self.params['max_num_hands']}"
-        cv2.putText(image, param_text, (10, y_offset), 
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
-        y_offset += 25
-        
-        confidence_text = f"Det: {self.params['min_detection_confidence']:.2f} | Track: {self.params['min_tracking_confidence']:.2f}"
-        cv2.putText(image, confidence_text, (10, y_offset), 
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
-
     def run(self):
         """Main execution loop"""    
         cap = cv2.VideoCapture(0)
