@@ -1,0 +1,15 @@
+mediapipe:
+  static_image_mode: false
+  max_num_hands: 2
+  model_complexity: 1
+  min_detection_confidence: 0.3
+  min_tracking_confidence: 0.3
+
+gesture:
+  model_path: "weights/gesture_recognizer.task"
+  interval: 0.5
+
+debug:
+  show_landmarks: false
+  show_bounding_box: false
+  print_gesture_recognition: true
